@@ -20,7 +20,7 @@ public class TicTacToe
         int row = -1;
         int col = -1;
         final int MOVES_FOR_WIN = 5;
-        final int MOVE_FOR_TIE = 7;
+        final int MOVES_FOR_TIE = 7;
 
         do //program loop
         {
@@ -37,10 +37,46 @@ public class TicTacToe
                 {
                     display();
                     System.out.println("Enter move for " + player);
+                    row = SafeInput.getRangedInt(in, "Enter row ", 1, 3);
+                    col = SafeInput.getRangedInt(in, "Enter col ", 1, 3);
+                    row--; col--;
+                }while(!isValidMove(row, col));
 
+                board[row][col] = player;
+                moveCnt++;
+
+                if(moveCnt >= MOVES_FOR_WIN)
+                {
+                    if(isWin(player))
+                    {
+                        display();
+                        System.out.println("Player " + player + " wins!");
+                        playing = false;
+                    }
                 }
-            }
-        }
+                if(moveCnt >= MOVES_FOR_TIE)
+                {
+                    if(isTie())
+                    {
+                        display();
+                        System.out.println("It's a Tie!");
+                        playing = false;
+                    }
+                }
+                if(player.equals("X"))
+                {
+                    player = "O";
+                }
+                else
+                {
+                    player = "X";
+                }
+
+            }while(playing);
+
+            finished = SafeInput.getYNConfirm(in, "done playing? ");
+
+        }while(!finished);
     }
 
     private static void clearBoard()
@@ -94,7 +130,7 @@ public class TicTacToe
         //checks for a col win for a specified player
         for(int col = 0; col < COL; col++)
         {
-            if (board(0)[col].equals(player) &&
+            if (board[0][col].equals(player) &&
                     board[1][col].equals(player) &&
                     board[2][col].equals(player))
             {
